@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class CompanyGame extends Model
+class CompanyGames extends Model
 {
-    protected $fillable = ['stock', 'price', 'company_id', 'juego_id'];
+    protected $fillable = ['stock', 'price', 'company_id', 'game_id'];
 
     public function company()
     {

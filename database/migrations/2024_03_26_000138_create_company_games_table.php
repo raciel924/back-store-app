@@ -18,11 +18,11 @@ class CreateCompanyGamesTable extends Migration
             $table->integer('stock');
             $table->decimal('price', 8, 2);
             $table->unsignedBigInteger('company_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('game_id');
             $table->timestamps();
 
             $table->foreign('company_id')->references('id')->on('companies');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('game_id')->references('id')->on('games');
         });
     }
 

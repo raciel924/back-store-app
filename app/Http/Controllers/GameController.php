@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CompanyGames;
 use App\Models\Games;
+use App\Models\Company;
 use Illuminate\Http\Request;
 
 class GameController extends Controller
@@ -33,13 +35,35 @@ class GameController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
-        $game = new Games($request->all());
-        $game->save();
-        return response()->json($game, 201);
+        $companyExists = Company::where('id', $request->get('company_id'))->exists();
+        if (!$companyExists) {
+            return response()->json(['success' => false, 'message' => 'El company_id proporcionado no existe'], 400);
+        }
+        DB::beginTransaction();
+        try {
+
+            $game = new Games();
+            $game->nombre = $request->get("nombre");
+            $game->save();
+
+
+            $juego = new CompanyGames();
+            $juego->stock = $request->get("stock");
+            $juego->price = $request->get("price");
+            $juego->company_id = $request->get("company_id");
+            $juego->game_id = $game->id;
+            $juego->save();
+            DB::commit();
+
+            return response()->json(["success" => true, "game" => $game, "details" => $juego ], 201);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(["success" => false, "message" => "Hubo un error al guardar los datos"], 500);
+        }
     }
 
     /**
@@ -74,16 +98,25 @@ class GameController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $id)
     {
         $game = Games::find($id);
+
         if ($game) {
-            $game->fill($request->all());
+            $game->nombre =$request->get('nombre');
             $game->save();
+
+            $game->companies()->updateExistingPivot($request->get('company_id'), [
+                'stock' => $request->get('stock'),
+                'price' => $request->get('price')
+            ]);
+
+
             return response()->json($game, 200);
         } else {
+
             return response()->json(['error' => 'Game not found'], 404);
         }
     }
