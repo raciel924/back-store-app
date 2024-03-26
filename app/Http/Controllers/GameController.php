@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Games;
 use Illuminate\Http\Request;
 
 class GameController extends Controller
@@ -13,8 +14,10 @@ class GameController extends Controller
      */
     public function index()
     {
-        //
+        $games = Games::all();
+        return response()->json($games, 200);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -34,7 +37,9 @@ class GameController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $game = new Games($request->all());
+        $game->save();
+        return response()->json($game, 201);
     }
 
     /**
@@ -45,7 +50,12 @@ class GameController extends Controller
      */
     public function show($id)
     {
-        //
+        $game = Games::find($id);
+        if ($game) {
+            return response()->json($game, 200);
+        } else {
+            return response()->json(['error' => 'Game not found'], 404);
+        }
     }
 
     /**
@@ -68,7 +78,14 @@ class GameController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $game = Games::find($id);
+        if ($game) {
+            $game->fill($request->all());
+            $game->save();
+            return response()->json($game, 200);
+        } else {
+            return response()->json(['error' => 'Game not found'], 404);
+        }
     }
 
     /**
@@ -79,6 +96,12 @@ class GameController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $game = Games::find($id);
+        if ($game) {
+            $game->delete();
+            return response()->json(['message' => 'Game deleted'], 200);
+        } else {
+            return response()->json(['error' => 'Game not found'], 404);
+        }
     }
 }
