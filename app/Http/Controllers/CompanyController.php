@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use Illuminate\Http\Request;
 
 class CompanyController extends Controller
@@ -9,11 +10,15 @@ class CompanyController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        //
+        $query = Company::all();
+        return response()->json([
+            "success" => true,
+            "data" => $query,
+        ]);
     }
 
     /**
@@ -41,11 +46,21 @@ class CompanyController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
-        //
+        if (!ctype_digit($id)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'El ID debe ser un número.'
+            ], 400); // Código de estado 400 para solicitud incorrecta
+        }
+        $query = Company::findOrFail($id);
+        return response()->json([
+            "success" => true,
+            "data" => $query,
+        ]);
     }
 
     /**

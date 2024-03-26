@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\UserController;
+use \App\Http\Controllers\CompanyController;
+use \App\Http\Controllers\LoginController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,5 +20,14 @@ use \App\Http\Controllers\UserController;
 
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('/companies', [UserController::class, 'indexCompanies']);
+    Route::prefix('companies')
+        ->group(function () {
+            Route::get('all', [CompanyController::class, 'index']);
+            Route::get('{id}', [CompanyController::class, 'show']);
+            Route::post('registry', [CompanyController::class, 'registry']);
+            Route::get('update/{id}', [CompanyController::class, 'update']);
+            Route::get('delete/{id}', [CompanyController::class, 'delete']);
+        });
+
+    Route::get('logout',[LoginController::class,'logout']);
 });

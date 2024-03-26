@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 
-use Validator;
+
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\Models\User;
+use \stdClass;
 
 class LoginController extends Controller
 {
@@ -37,18 +40,28 @@ class LoginController extends Controller
         }
     }
     public function  register(Request $request){
-        $validator = Validator::make($request->all(),[
-           'name' => 'request|string|max:255',
-           'email' => 'required|string|email|unique:users',
-           'password' => 'required|string|min:8'
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|unique:users',
+            'password' => 'required|string|min:8'
         ]);
-        if($validator->fails()){
-            return response()->json($validator->errors());
+
+        if ($validator->fails()) {
+            return response()->json(["message" =>"Unprocessable Entity"],422);
         }
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password'=> $request->password,
+            'mail_verified_at' => now(),
+            'password'=>Hash::make($request->password),
         ]);
+        return response()
+            ->json(['data'=>$user]);
+    }
+    public function logout(){
+        auth()->user()->tokens()->delete();
+        return [
+          "message" => "Token delated"
+        ];
     }
 }

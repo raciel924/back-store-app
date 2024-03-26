@@ -21,7 +21,6 @@ Route::prefix('auth/')->name('auth.')
     ->group(function () {
         Route::post('login', [LoginController::class, 'auth'])
             ->name('login');
-
-        Route::get('logout', [LoginController::class, 'logout'])
-            ->name('logout');
+        Route::post('register', [LoginController::class, 'register'])
+            ->name('register');
     });
