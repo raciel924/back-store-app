@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\UserController;
+use \App\Http\Controllers\GameController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -19,4 +20,10 @@ use \App\Http\Controllers\UserController;
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/companies', [UserController::class, 'indexCompanies']);
+
+    Route::get('/games/all', [GameController::class, 'index']);
+    Route::get('/games/{id}', [GameController::class, 'show']);
+    Route::post('/games/create', [GameController::class, 'store']);
+    Route::put('/games/edit/{id}', [GameController::class, 'update']);
+    Route::delete('/games/delete/{id}', [GameController::class, 'destroy']);
 });
