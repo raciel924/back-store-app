@@ -25,9 +25,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
         ->group(function () {
             Route::get('all', [CompanyController::class, 'index']);
             Route::get('{id}', [CompanyController::class, 'show']);
-            Route::post('registry', [CompanyController::class, 'registry']);
-            Route::get('update/{id}', [CompanyController::class, 'update']);
-            Route::get('delete/{id}', [CompanyController::class, 'delete']);
+            Route::post('create', [CompanyController::class, 'store']);
+            Route::post('update/{id}', [CompanyController::class, 'update']);
+            Route::post('delete/{id}', [CompanyController::class, 'destroy']);
         });
 
     Route::get('logout',[LoginController::class,'logout']);
@@ -35,6 +35,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/games/all', [GameController::class, 'index']);
     Route::get('/games/{id}', [GameController::class, 'show']);
     Route::post('/games/create', [GameController::class, 'store']);
-    Route::put('/games/edit/{id}', [GameController::class, 'update']);
-    Route::delete('/games/delete/{id}', [GameController::class, 'destroy']);
+    Route::post('/games/edit/{id}', [GameController::class, 'update']);
+    Route::post('/games/delete/{id}', [GameController::class, 'destroy']);
 });

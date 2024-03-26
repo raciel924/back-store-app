@@ -39,7 +39,9 @@ class CompanyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $game = new Company($request->all());
+        $game->save();
+        return response()->json($game, 201);
     }
 
     /**
@@ -79,21 +81,36 @@ class CompanyController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $id)
     {
-        //
+
+        $comapny = Company::find($id);
+        if ($comapny) {
+            $comapny->fill($request->all());
+            $comapny->save();
+
+            return response()->json($comapny, 200);
+        } else {
+            return response()->json(['error' => 'Game not found'], 404);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
-        //
+        $comapny = Company::find($id);
+        if ($comapny) {
+            $comapny->delete();
+            return response()->json(['message' => 'Game deleted'], 200);
+        } else {
+            return response()->json(['error' => 'Game not found'], 404);
+        }
     }
 }
