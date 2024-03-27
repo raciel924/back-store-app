@@ -39,7 +39,7 @@ Este proyecto es una tienda de juegos online desarrollada con React.
 
 ## Autenticación
 Todas las rutas están protegidas con el middleware 'auth:sanctum'. para acceder a ellas se tiene que usar el token
-de autenticacion que se genera en el login y en todas las peticiones tiene que ir ese token en el encabezado la autenticacion es de tipo bearer Token
+de autenticacion que se genera en el login y en todas las peticiones tiene que ir ese token en el encabezado de la peticion,  la autenticacion es de tipo bearer Token
 
 
 ## Rutas de Compañías
