@@ -41,5 +41,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         });
 
     Route::get('/company-games', [CompanyGameController::class, 'index']);
+
+    Route::put('/users/edit/{id}', [UserController::class, 'update']);
+
     Route::get('logout',[LoginController::class,'logout']);
 });
