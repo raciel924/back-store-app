@@ -10,7 +10,7 @@ class Games extends Model
 
     public function companies()
     {
-        return $this->belongsToMany(Company::class)
+        return $this->belongsToMany(Company::class, 'company_games', 'game_id', 'company_id')
             ->withPivot('stock', 'price');
     }
 }

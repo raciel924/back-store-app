@@ -72,7 +72,7 @@ class GameController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
@@ -80,13 +80,21 @@ class GameController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'El ID debe ser un número.'
-            ], 400); // Código de estado 400 para solicitud incorrecta
+            ], 400);
         }
-        $game = Games::findOrFail($id);;
-        return response()->json([
-            "success" => true,
-            "data" => $game,
-        ]);
+        try {
+            $game = Games::findOrFail($id);
+
+            return response()->json([
+                "success" => true,
+                "data" => $game,
+            ]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                "success" => false,
+                "message" => "Juego no encontrado",
+            ], 404);
+        }
     }
 
     /**
@@ -121,6 +129,7 @@ class GameController extends Controller
 
         DB::beginTransaction();
         try {
+            $game->nombre = $request->get('nombre');
             $companyGame = CompanyGames::where('game_id', $game->id)
                 ->where('company_id', $request->get('company_id'))
                 ->first();
@@ -131,6 +140,7 @@ class GameController extends Controller
 
             $companyGame->stock = $request->get('stock');
             $companyGame->price = $request->get('price');
+            $game->save();
             $companyGame->save();
             DB::commit();
 
@@ -146,7 +156,7 @@ class GameController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
@@ -159,15 +169,19 @@ class GameController extends Controller
         try {
             if ($game->companies()) {
                 $game->companies()->detach();
-            }
 
+            }
             $game->delete();
             DB::commit();
 
             return response()->json(['success' => true, 'message' => 'Game deleted'], 200);
         } catch (\Exception $e) {
             DB::rollback();
-            return response()->json(['success' => false, 'message' => 'Hubo un error al eliminar el juego'], 500);
+            return response()->json([
+                'success' => false,
+                'message' => 'Hubo un error al eliminar el juego: ' . $e->getMessage(),
+                'trace' => $e->getTraceAsString() // Esto mostrará el rastreo de la pila de llamadas
+            ], 500);
         }
     }
 }

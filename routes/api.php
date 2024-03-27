@@ -34,6 +34,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('games')
         ->group(function () {
             Route::get('all', [GameController::class, 'index']);
+            Route::post('/search', [CompanyGameController::class, 'showName']);
             Route::get('{id}', [GameController::class, 'show']);
             Route::post('create', [GameController::class, 'store']);
             Route::post('update/{id}', [GameController::class, 'update']);
@@ -41,6 +42,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         });
 
     Route::get('/company-games', [CompanyGameController::class, 'index']);
+    Route::get('/company-games/{companyId}', [CompanyGameController::class, 'show']);
 
     Route::put('/users/edit/{id}', [UserController::class, 'update']);
 
