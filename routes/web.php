@@ -17,6 +17,7 @@ use \App\Http\Controllers\UserController;
 Route::get('/', function () {
     return view('welcome');
 });
+
 Route::prefix('auth/')->name('auth.')
     ->group(function () {
         Route::post('login', [LoginController::class, 'auth'])
