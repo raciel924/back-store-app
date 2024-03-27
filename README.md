@@ -33,7 +33,8 @@ Este proyecto es una tienda de juegos online desarrollada con React.
 ## Dependencias
 - Formik: Para manejar los formularios y sus validaciones.
 
-
+## Notas
+ instalar las migraciones asi como el seeder 
 
 # API de Laravel
 
