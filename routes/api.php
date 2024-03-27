@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\UserController;
 use \App\Http\Controllers\GameController;
 use \App\Http\Controllers\CompanyController;
+use App\Http\Controllers\CompanyGameController;
 use \App\Http\Controllers\LoginController;
 /*
 |--------------------------------------------------------------------------
@@ -30,11 +31,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::post('delete/{id}', [CompanyController::class, 'destroy']);
         });
 
-    Route::get('logout',[LoginController::class,'logout']);
+    Route::prefix('games')
+        ->group(function () {
+            Route::get('all', [GameController::class, 'index']);
+            Route::get('{id}', [GameController::class, 'show']);
+            Route::post('create', [GameController::class, 'store']);
+            Route::post('update/{id}', [GameController::class, 'update']);
+            Route::post('delete/{id}', [GameController::class, 'destroy']);
+        });
 
-    Route::get('/games/all', [GameController::class, 'index']);
-    Route::get('/games/{id}', [GameController::class, 'show']);
-    Route::post('/games/create', [GameController::class, 'store']);
-    Route::post('/games/edit/{id}', [GameController::class, 'update']);
-    Route::post('/games/delete/{id}', [GameController::class, 'destroy']);
+    Route::get('/company-games', [CompanyGameController::class, 'index']);
+    Route::get('logout',[LoginController::class,'logout']);
 });

@@ -26,10 +26,10 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
+    // public function create()
+    // {
+    //     //
+    // }
 
     /**
      * Store a newly created resource in storage.
@@ -71,10 +71,10 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
-    }
+    // public function edit($id)
+    // {
+    //     //
+    // }
 
     /**
      * Update the specified resource in storage.
@@ -108,9 +108,9 @@ class CompanyController extends Controller
         $comapny = Company::find($id);
         if ($comapny) {
             $comapny->delete();
-            return response()->json(['message' => 'Game deleted'], 200);
+            return response()->json(['message' => 'Company deleted'], 200);
         } else {
-            return response()->json(['error' => 'Game not found'], 404);
+            return response()->json(['error' => 'Company not found'], 404);
         }
     }
 }

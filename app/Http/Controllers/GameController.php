@@ -6,6 +6,7 @@ use App\Models\CompanyGames;
 use App\Models\Games;
 use App\Models\Company;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class GameController extends Controller
 {
@@ -17,19 +18,21 @@ class GameController extends Controller
     public function index()
     {
         $games = Games::all();
-        return response()->json($games, 200);
+        return response()->json([
+            "success" => true,
+            "data" => $games,
+        ]);
     }
-
 
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
+//    public function create()
+//     {
+//         //
+//     }
 
     /**
      * Store a newly created resource in storage.
@@ -43,13 +46,12 @@ class GameController extends Controller
         if (!$companyExists) {
             return response()->json(['success' => false, 'message' => 'El company_id proporcionado no existe'], 400);
         }
+
         DB::beginTransaction();
         try {
-
             $game = new Games();
             $game->nombre = $request->get("nombre");
             $game->save();
-
 
             $juego = new CompanyGames();
             $juego->stock = $request->get("stock");
@@ -74,12 +76,17 @@ class GameController extends Controller
      */
     public function show($id)
     {
-        $game = Games::find($id);
-        if ($game) {
-            return response()->json($game, 200);
-        } else {
-            return response()->json(['error' => 'Game not found'], 404);
+        if (!ctype_digit($id)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'El ID debe ser un número.'
+            ], 400); // Código de estado 400 para solicitud incorrecta
         }
+        $game = Games::findOrFail($id);;
+        return response()->json([
+            "success" => true,
+            "data" => $game,
+        ]);
     }
 
     /**
@@ -88,10 +95,10 @@ class GameController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
-    }
+    // public function edit($id)
+    // {
+    //     //
+    // }
 
     /**
      * Update the specified resource in storage.
@@ -102,24 +109,38 @@ class GameController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $companyExists = Company::where('id', $request->get('company_id'))->exists();
+        if (!$companyExists) {
+            return response()->json(['success' => false, 'message' => 'El company_id proporcionado no existe'], 400);
+        }
+
         $game = Games::find($id);
+        if (!$game) {
+            return response()->json(['error' => 'El id del juego no existe'], 404);
+        }
 
-        if ($game) {
-            $game->nombre =$request->get('nombre');
-            $game->save();
+        DB::beginTransaction();
+        try {
+            $companyGame = CompanyGames::where('game_id', $game->id)
+                ->where('company_id', $request->get('company_id'))
+                ->first();
 
-            $game->companies()->updateExistingPivot($request->get('company_id'), [
-                'stock' => $request->get('stock'),
-                'price' => $request->get('price')
-            ]);
+            if (!$companyGame) {
+                return response()->json(['success' => false, 'message' => 'No se encontró la relación juego-compañía'], 404);
+            }
 
+            $companyGame->stock = $request->get('stock');
+            $companyGame->price = $request->get('price');
+            $companyGame->save();
+            DB::commit();
 
-            return response()->json($game, 200);
-        } else {
-
-            return response()->json(['error' => 'Game not found'], 404);
+            return response()->json(['success' => true, 'game' => $game], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(["success" => false, "message" => "Hubo un error al actualizar los datos"], 500);
         }
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -130,11 +151,23 @@ class GameController extends Controller
     public function destroy($id)
     {
         $game = Games::find($id);
-        if ($game) {
-            $game->delete();
-            return response()->json(['message' => 'Game deleted'], 200);
-        } else {
+        if (!$game) {
             return response()->json(['error' => 'Game not found'], 404);
+        }
+
+        DB::beginTransaction();
+        try {
+            if ($game->companies()) {
+                $game->companies()->detach();
+            }
+
+            $game->delete();
+            DB::commit();
+
+            return response()->json(['success' => true, 'message' => 'Game deleted'], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['success' => false, 'message' => 'Hubo un error al eliminar el juego'], 500);
         }
     }
 }
