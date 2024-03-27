@@ -1,64 +1,103 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Tienda de Juegos con React
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Este proyecto es una tienda de juegos online desarrollada con React.
 
-## About Laravel
+## Funcionalidades
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Página de Login/Registro
+- Formulario de registro e inicio de sesión controlado con sus respectivas validaciones.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Header
+- Menú header con una opción de editar que muestra un formulario para editar el nombre del usuario.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Página de Catálogo
+- Muestra una lista de juegos con información como título, precio.
+- Permite al usuario filtrar y ordenar los juegos.
+- Opción para poder agregar un nuevo juego al catálogo.
+- Sistema de filtro por compañía, precios, etc.
 
-## Learning Laravel
+### Página de Detalles del Juego
+- Muestra información detallada de un juego específico (título, descripción, compañía y el precio). Opcional: Agregar imágenes (no importa si es estático).
+- Permite al usuario añadir el juego al carrito de compras.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Página de Carrito de Compras
+- Muestra una lista de los juegos seleccionados por el usuario.
+- Permite al usuario modificar la cantidad de juegos o eliminarlos del carrito.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Compañías
+- Opción para poder agregar una nueva compañía a la BD.
 
-## Laravel Sponsors
+## Indicaciones
+- Los datos actualizados o nuevos deben de mostrarse en tiempo real sin necesidad de recargar la página.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Dependencias
+- Formik: Para manejar los formularios y sus validaciones.
 
-### Premium Partners
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
 
-## Contributing
+# API de Laravel
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Autenticación
+Todas las rutas están protegidas con el middleware 'auth:sanctum'. para acceder a ellas se tiene que usar el token
+de autenticacion que se genera en el login y en todas las peticiones tiene que ir ese token en el encabezado la autenticacion es de tipo bearer Token
 
-## Code of Conduct
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Rutas de Compañías
 
-## Security Vulnerabilities
+- `GET /companies/all`: Obtiene todas las compañías.
+- `GET /companies/{id}`: Obtiene la compañía con el ID especificado.
+- `POST /companies/create`: Crea una nueva compañía. Debes enviar los datos de la compañía en el cuerpo de la solicitud.
+- `POST /companies/update/{id}`: Actualiza la compañía con el ID especificado. Debes enviar los nuevos datos en el cuerpo de la solicitud.
+- `POST /companies/delete/{id}`: Elimina la compañía con el ID especificado.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Rutas de Juegos
 
-## License
+- `GET /games/all`: Obtiene todos los juegos.
+- `POST /games/search`: Busca un juego por nombre. Debes enviar el nombre en el cuerpo de la solicitud.
+- `GET /games/{id}`: Obtiene el juego con el ID especificado.
+- `POST /games/create`: Crea un nuevo juego. Debes enviar los datos del juego en el cuerpo de la solicitud.
+- `POST /games/update/{id}`: Actualiza el juego con el ID especificado. Debes enviar los nuevos datos en el cuerpo de la solicitud.
+- `POST /games/delete/{id}`: Elimina el juego con el ID especificado.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Rutas de Juegos de Compañías
+
+- `GET /company-games`: Obtiene todos los juegos de todas las compañías.
+- `GET /company-games/{companyId}`: Obtiene todos los juegos de la compañía con el ID especificado.
+
+## Rutas de Usuarios
+
+- `PUT /users/edit/{id}`: Actualiza el usuario con el ID especificado. Debes enviar los nuevos datos en el cuerpo de la solicitud.
+
+## Rutas de Autenticación
+
+- `GET /logout`: Cierra la sesión del usuario actual.
+
+
+### Ruta de Login
+
+- `POST /auth/login`: Inicia la sesion .
+    header: application/json
+    parameters:
+        email :string
+        password :string
+    success:
+        HTTP: 200 OK
+        user: data
+        access_token: token
+    Fail:
+        HTTP: 401 Unauthorized
+        message: Unauthorized
+- `POST /auth/register`: Registro de usuarios .
+    header: application/json
+    parameters:
+        name :string,required,max:255
+        email :string,required,email,unique
+        password :required,string,min:8
+    success:
+        HTTP: 200 OK
+        user: data
+    Fail:
+        HTTP: 422 Unauthorized
+        message: Unprocessable Entity
+        uno de los parametros no se cumplio
+
