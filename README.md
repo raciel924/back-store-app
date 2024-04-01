@@ -45,33 +45,33 @@ de autenticacion que se genera en el login y en todas las peticiones tiene que i
 
 ## Rutas de Compañías
 
-- `GET /companies/all`: Obtiene todas las compañías.
-- `GET /companies/{id}`: Obtiene la compañía con el ID especificado.
-- `POST /companies/create`: Crea una nueva compañía. Debes enviar los datos de la compañía en el cuerpo de la solicitud.
-- `POST /companies/update/{id}`: Actualiza la compañía con el ID especificado. Debes enviar los nuevos datos en el cuerpo de la solicitud.
-- `POST /companies/delete/{id}`: Elimina la compañía con el ID especificado.
+- `GET api/companies/all`: Obtiene todas las compañías.
+- `GET api/companies/{id}`: Obtiene la compañía con el ID especificado.
+- `POST api/companies/create`: Crea una nueva compañía. Debes enviar los datos de la compañía en el cuerpo de la solicitud.
+- `POST api/companies/update/{id}`: Actualiza la compañía con el ID especificado. Debes enviar los nuevos datos en el cuerpo de la solicitud.
+- `POST api/companies/delete/{id}`: Elimina la compañía con el ID especificado.
 
 ## Rutas de Juegos
 
-- `GET /games/all`: Obtiene todos los juegos.
-- `POST /games/search`: Busca un juego por nombre. Debes enviar el nombre en el cuerpo de la solicitud.
-- `GET /games/{id}`: Obtiene el juego con el ID especificado.
-- `POST /games/create`: Crea un nuevo juego. Debes enviar los datos del juego en el cuerpo de la solicitud.
-- `POST /games/update/{id}`: Actualiza el juego con el ID especificado. Debes enviar los nuevos datos en el cuerpo de la solicitud.
-- `POST /games/delete/{id}`: Elimina el juego con el ID especificado.
+- `GET api/games/all`: Obtiene todos los juegos.
+- `POST api/games/search`: Busca un juego por nombre. Debes enviar el nombre en el cuerpo de la solicitud.
+- `GET api/games/{id}`: Obtiene el juego con el ID especificado.
+- `POST api/games/create`: Crea un nuevo juego. Debes enviar los datos del juego en el cuerpo de la solicitud.
+- `POST api/games/update/{id}`: Actualiza el juego con el ID especificado. Debes enviar los nuevos datos en el cuerpo de la solicitud.
+- `POST api/games/delete/{id}`: Elimina el juego con el ID especificado.
 
 ## Rutas de Juegos de Compañías
 
-- `GET /company-games`: Obtiene todos los juegos de todas las compañías.
-- `GET /company-games/{companyId}`: Obtiene todos los juegos de la compañía con el ID especificado.
+- `GET api/company-games`: Obtiene todos los juegos de todas las compañías.
+- `GET api/company-games/{companyId}`: Obtiene todos los juegos de la compañía con el ID especificado.
 
 ## Rutas de Usuarios
 
-- `PUT /users/edit/{id}`: Actualiza el usuario con el ID especificado. Debes enviar los nuevos datos en el cuerpo de la solicitud.
+- `PUT api/users/edit/{id}`: Actualiza el usuario con el ID especificado. Debes enviar los nuevos datos en el cuerpo de la solicitud.
 
 ## Rutas de Autenticación
 
-- `GET /logout`: Cierra la sesión del usuario actual.
+- `GET api/logout`: Cierra la sesión del usuario actual.
 
 
 ### Ruta de Login
